@@ -38,10 +38,22 @@ from datetime import datetime
 import base64
 import json
 import os
+import serial 
+import pynmea2
 
 con = MongoClient('127.0.0.1',27017)
 db = con.get_database('SDR')
 obj = db.SDR
+
+serialPort = serial.Serial(port, baudrate = 9600)
+
+def parseGPS(str):
+	if str.find('GGA') > 0:
+		msg = pynmea2.parse(str)
+		return lat = msg.lat, lon = msg.lon
+	else: 
+		return lat = None, lon = None
+
 
 
 # Color and gradient interpolation functions used by waterfall 
@@ -478,10 +490,11 @@ class InstantSpectrogram(SpectrogramBase):
 		# intensity values.
 		x, y, width, height = screen.get_rect()
 		freqs = height-np.floor(((freqs-self.model.min_intensity)/self.model.range)*height)
-
+		str = serialPort.readline()
+		lat, lon = parseGPS(str)
                 buffer = {'Date':str(date.today()),
                 'Time':str(datetime.time(datetime.now())),
-                'GPS':'None,None',
+                'GPS': lat + ',' + lon,
                 'center_freq': self.model.get_center_freq(),
                 'sample_rate': self.model.get_sample_rate(),
                 'gain': self.model.get_gain(),
