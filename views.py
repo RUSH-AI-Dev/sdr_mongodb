@@ -279,7 +279,7 @@ class SettingsList(ViewBase):
 		self.buttons.add(2, 3, max_text,        colspan=2, click=self.max_click)
 		self.buttons.add(0, 4, 'BACK', click=self.controller.change_to_main)
 		gw = os.popen("ip -4 route show default").read().split()
-		self.buttons.add(1, 4, gw[2]+':27017', click=self.controller.change_to_main)
+		self.buttons.add(1, 4, gw[8]+':27017', click=self.controller.change_to_main)
 
 	def render(self, screen):
 		# Clear view and render buttons.
