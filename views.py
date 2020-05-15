@@ -36,10 +36,10 @@ from pymongo import MongoClient
 from datetime import date 
 from datetime import datetime
 import base64
+import json
 
 
-
-con = MongoClient('10.5.50.14',27017)
+con = MongoClient('127.0.0.0',27017)
 db = con.get_database('SDR')
 obj = db.SDR
 
@@ -485,7 +485,7 @@ class InstantSpectrogram(SpectrogramBase):
                 'gain': self.model.get_gain(),
                 'min_db': self.model.get_min_string(),
                 'max_db': self.model.get_max_string(),
-                'freq': base64.b64encode(freqs).decode('utf-8')}
+                'freq': base64.b64encode(json.dumps(freqs))}
 
 		obj.insert_one(buffer)
 		# Render frequency graph.
