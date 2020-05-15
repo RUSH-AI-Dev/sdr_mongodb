@@ -53,7 +53,7 @@ def parseGPS(ser):
 		msg = pynmea2.parse(ser)
 		return msg.lat, msg.lon
 	else: 
-		return None, None
+		return str(None), str(None)
 
 
 
