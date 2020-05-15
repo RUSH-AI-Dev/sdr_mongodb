@@ -491,8 +491,13 @@ class InstantSpectrogram(SpectrogramBase):
 		# intensity values.
 		x, y, width, height = screen.get_rect()
 		freqs = height-np.floor(((freqs-self.model.min_intensity)/self.model.range)*height)
-		ser = serialPort.readline()
-		lat, lon = parseGPS(ser)
+		
+		try:
+			ser = serialPort.readline()
+			lat, lon = parseGPS(ser)
+		except:
+			pass
+		
                 buffer = {'Date':str(date.today()),
                 'Time':str(datetime.time(datetime.now())),
                 'GPS': lat + ',' + lon,
