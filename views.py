@@ -39,7 +39,7 @@ import base64
 import json
 
 
-con = MongoClient('127.0.0.0',27017)
+con = MongoClient('127.0.0.1',27017)
 db = con.get_database('SDR')
 obj = db.SDR
 
