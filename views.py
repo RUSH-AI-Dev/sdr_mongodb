@@ -50,9 +50,9 @@ serialPort = serial.Serial(port, baudrate = 9600)
 def parseGPS(str):
 	if str.find('GGA') > 0:
 		msg = pynmea2.parse(str)
-		return lat = msg.lat, lon = msg.lon
+		return msg.lat, msg.lon
 	else: 
-		return lat = None, lon = None
+		return None, None
 
 
 
