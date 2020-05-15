@@ -48,9 +48,9 @@ obj = db.SDR
 port = '/dev/ttyAMA0'
 serialPort = serial.Serial(port, 9600, timeout=1)
 
-def parseGPS(str):
+def parseGPS(ser):
 	if str.find('GGA') > 0:
-		msg = pynmea2.parse(str)
+		msg = pynmea2.parse(ser)
 		return msg.lat, msg.lon
 	else: 
 		return None, None
@@ -492,7 +492,7 @@ class InstantSpectrogram(SpectrogramBase):
 		x, y, width, height = screen.get_rect()
 		freqs = height-np.floor(((freqs-self.model.min_intensity)/self.model.range)*height)
 		str = serialPort.readline()
-		lat, lon = parseGPS(str)
+		lat, lon = parseGPS(ser)
                 buffer = {'Date':str(date.today()),
                 'Time':str(datetime.time(datetime.now())),
                 'GPS': lat + ',' + lon,
