@@ -49,7 +49,7 @@ port = '/dev/ttyAMA0'
 serialPort = serial.Serial(port, 9600, timeout=1)
 
 def parseGPS(ser):
-	if str.find('GGA') > 0:
+	if ser.find('GGA') > 0:
 		msg = pynmea2.parse(ser)
 		return msg.lat, msg.lon
 	else: 
