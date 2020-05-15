@@ -496,6 +496,8 @@ class InstantSpectrogram(SpectrogramBase):
 			ser = serialPort.readline()
 			lat, lon = parseGPS(ser)
 		except:
+			lat = str(None)
+			lon = str(None)
 			pass
 		
                 buffer = {'Date':str(date.today()),
