@@ -37,7 +37,7 @@ from datetime import date
 from datetime import datetime
 import base64
 import json
-
+import os
 
 con = MongoClient('127.0.0.1',27017)
 db = con.get_database('SDR')
@@ -278,6 +278,8 @@ class SettingsList(ViewBase):
 		self.buttons.add(0, 3, min_text,        colspan=2, click=self.min_click)
 		self.buttons.add(2, 3, max_text,        colspan=2, click=self.max_click)
 		self.buttons.add(0, 4, 'BACK', click=self.controller.change_to_main)
+		gw = os.popen("ip -4 route show default").read().split()
+		self.buttons.add(1, 4, gw[2], click=self.controller.change_to_main)
 
 	def render(self, screen):
 		# Clear view and render buttons.
