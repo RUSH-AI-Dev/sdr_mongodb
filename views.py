@@ -485,7 +485,7 @@ class InstantSpectrogram(SpectrogramBase):
                 'gain': self.model.get_gain(),
                 'min_db': self.model.get_min_string(),
                 'max_db': self.model.get_max_string(),
-                'freq': base64.b64encode(json.dumps(freqs))}
+                'freq': base64.b64encode(json.dumps(freqs)).decode('utf-8')}
 
 		obj.insert_one(buffer)
 		# Render frequency graph.
