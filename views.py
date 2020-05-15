@@ -45,7 +45,8 @@ con = MongoClient('127.0.0.1',27017)
 db = con.get_database('SDR')
 obj = db.SDR
 
-serialPort = serial.Serial(port, baudrate = 9600)
+port = '/dev/ttyAMA0'
+serialPort = serial.Serial(port, 9600, timeout=1)
 
 def parseGPS(str):
 	if str.find('GGA') > 0:
