@@ -32,7 +32,6 @@ import pygame
 import freqshow 
 import ui
 
-from pymongo import MongoClient 
 from datetime import date 
 from datetime import datetime
 import base64
@@ -40,10 +39,6 @@ import json
 import os
 import serial 
 import pynmea2
-
-con = MongoClient('127.0.0.1',27017)
-db = con.get_database('SDR')
-obj = db.SDR
 
 port = '/dev/ttyAMA0'
 serialPort = serial.Serial(port, 9600, timeout=1)
@@ -499,18 +494,22 @@ class InstantSpectrogram(SpectrogramBase):
 			lat = str(None)
 			lon = str(None)
 			pass
-		
-                buffer = {'Date':str(date.today()),
-                'Time':str(datetime.time(datetime.now())),
-                'GPS': lat + ',' + lon,
-                'center_freq': self.model.get_center_freq(),
-                'sample_rate': self.model.get_sample_rate(),
-                'gain': self.model.get_gain(),
-                'min_db': self.model.get_min_string(),
-                'max_db': self.model.get_max_string(),
-                'freq': base64.b64encode(json.dumps(freqs.tolist())).decode('utf-8')}
 
-		obj.insert_one(buffer)
+		file = open("/home/pi/datalog/"+ str(date.today()) +".csv", "a")
+		if os.stat("/home/pi/datalog/"+ str(date.today()) +".csv").st_size == 0:
+			file.write("Date,Time,GPS,center_freq,sample_rate,gain,min_db,max_db,freq\n")
+		file.write(str(date.today()) + "," + 
+		str(datetime.time(datetime.now())) + "," +  
+		str(lat + ',' + lon) + "," + 
+		str(self.model.get_center_freq()) + "," +  
+		str(self.model.get_sample_rate()) + "," +   
+		str(self.model.get_gain()) + "," + 
+		str(self.model.get_min_string()) + "," + 
+		str(self.model.get_max_string()) + "," + 
+		base64.b64encode(json.dumps(freqs.tolist())).decode('utf-8') 
+		+ "\n")
+		file.flush()
+		file.close()
 		# Render frequency graph.
 		screen.fill(freqshow.MAIN_BG)
 		# Draw line segments to join each FFT result bin.
